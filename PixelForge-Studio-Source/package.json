@@ -1,0 +1,65 @@
+{
+    "name": "pixelforge-studio",
+    "version": "1.0.0",
+    "description": "Professional desktop image editing application.",
+    "author": "PixelForge Studio",
+    "private": true,
+    "type": "module",
+    "main": "dist-electron/main.cjs",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc --noEmit && vite build && npm run build:electron",
+        "build:electron": "node scripts/build-electron.mjs",
+        "start": "npm run build && node scripts/launch-electron.cjs .",
+        "dev:desktop": "npm run build:electron && concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && node scripts/launch-electron.cjs .\"",
+        "dist:win": "npm run build && electron-builder --win nsis",
+        "test": "node --test tests/project-format.test.mjs tests/paths-channels.test.mjs tests/selection-mask-layers.test.mjs tests/adjustments.test.mjs tests/history-reliability.test.mjs tests/resource-safety.test.mjs tests/gradient-fill.test.mjs tests/retouch-tools.test.mjs tests/vector-text-safety.test.mjs"
+    },
+    "dependencies": {
+        "lucide-react": "^0.468.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
+    },
+    "devDependencies": {
+        "@types/react": "^19.0.0",
+        "@types/react-dom": "^19.0.0",
+        "@vitejs/plugin-react": "^4.3.0",
+        "concurrently": "^9.1.0",
+        "electron": "^34.0.0",
+        "electron-builder": "^26.18.0",
+        "typescript": "^5.7.0",
+        "vite": "^6.0.0",
+        "wait-on": "^8.0.1"
+    },
+    "build": {
+        "appId": "com.pixelforge.studio",
+        "productName": "PixelForge Studio",
+        "directories": {
+            "output": "release"
+        },
+        "files": [
+            "dist/**/*",
+            "dist-electron/**/*",
+            "assets/**/*",
+            "package.json"
+        ],
+        "win": {
+            "target": "nsis",
+            "icon": "assets/pixelforge.ico",
+            "signExecutable": false
+        },
+        "nsis": {
+            "oneClick": true,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "installerIcon": "assets/pixelforge.ico",
+            "uninstallerIcon": "assets/pixelforge.ico",
+            "allowElevation": false,
+            "perMachine": false
+        }
+    },
+    "allowScripts": {
+        "electron@34.5.8": true,
+        "esbuild@0.25.12": true
+    }
+}
